@@ -32,9 +32,6 @@ if (len(sys.argv) == 4):
 
 print(exclusions)
 
-
-
-
 # Check if file exists
 if (not os.path.isfile(filepath)):
     print("File not found")
@@ -44,6 +41,8 @@ if (not os.path.isfile(filepath)):
 if (not os.path.isdir(outputDir)):
     # Create the directory
     os.makedirs(outputDir)
+
+print("Extracting text from " + filepath)
 
 # creating a pdf reader object
 reader = PdfReader(filepath)
@@ -56,18 +55,18 @@ for i in range(len(reader.pages)):
     if (pageNum in exclusions):
         continue
     
+    # Get the page
+    page = reader.pages[i]
+
+    # Extract the text
+    text = page.extract_text()
+
+    # Output file name
+    outputFileName = outputDir + "/page_" + str(pageNum) + ".txt"
+
+    # Create the output file
+    with open(outputFileName, "w") as output_file:
+        output_file.write(text)
+        print("Created file: " + outputFileName)
     
-
-sys.exit()
-
-# printing number of pages in pdf file
-print(len(reader.pages))
-
-
-# getting a specific page from the pdf file
-page = reader.pages[6]
-
-# extracting text from page
-text = page.extract_text()
-
-print(text)
+print("Done")
